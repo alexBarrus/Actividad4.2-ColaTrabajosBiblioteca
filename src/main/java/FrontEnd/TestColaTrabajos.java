@@ -1,4 +1,4 @@
-/*Barrutiea Nulutagua Juan Alexander
+/*Barrutieta Nulutagua Juan Alexander
 Alcala Bejarano Jennifer Paola
 */
 
@@ -37,7 +37,7 @@ public class TestColaTrabajos extends javax.swing.JFrame {
         initComponents();
         actualizarCampos();
         actualizarVista();
-        txtResultado.setText("Capture los datos de un trabajo y presione \"Encolar (Offer)\".");
+        mostrarResultado("Capture los datos de un trabajo y presione \"Encolar (Offer)\".");
     }
 
     /**
@@ -314,7 +314,7 @@ public class TestColaTrabajos extends javax.swing.JFrame {
         try {
             Trabajo trabajo = crearTrabajoDesdeFormulario();   // referencia polimórfica
             cola.offer(trabajo);
-            txtResultado.setText("ENCOLADO al final de la cola (" + trabajo.getTipo() + "):\n" + trabajo);
+            mostrarResultado("ENCOLADO al final de la cola (" + trabajo.getTipo() + "):\n" + trabajo);
             limpiarCampos();
             actualizarVista();
         } catch (IllegalArgumentException e) {
@@ -329,7 +329,7 @@ public class TestColaTrabajos extends javax.swing.JFrame {
         }
         Trabajo atendido = cola.poll();
         atendidos++;
-        txtResultado.setText("ATENDIDO (poll) #" + atendidos + " - salió del frente:\n" + atendido
+        mostrarResultado("ATENDIDO (poll) #" + atendidos + " - salió del frente:\n" + atendido
                 + "\n\nTipo: " + atendido.getTipo()
                 + "\nQuedan " + cola.size() + " trabajo(s) en la cola.");
         actualizarVista();
@@ -341,7 +341,7 @@ public class TestColaTrabajos extends javax.swing.JFrame {
             return;
         }
         Trabajo frente = cola.peek();
-        txtResultado.setText("FRENTE de la cola (peek, no se remueve):\n" + frente
+        mostrarResultado("FRENTE de la cola (peek, no se remueve):\n" + frente
                 + "\n\nLa cola sigue teniendo " + cola.size() + " trabajo(s).");
         actualizarVista();
     }//GEN-LAST:event_btnConsultarActionPerformed
@@ -360,14 +360,14 @@ public class TestColaTrabajos extends javax.swing.JFrame {
         int eliminados = cola.size();
         cola.vaciarCola();
         actualizarVista();
-        txtResultado.setText("Cola vaciada: se eliminaron " + eliminados + " trabajo(s).\nisEmpty() = " + cola.isEmpty());
+        mostrarResultado("Cola vaciada: se eliminaron " + eliminados + " trabajo(s).\nisEmpty() = " + cola.isEmpty());
         JOptionPane.showMessageDialog(this, "La cola fue vaciada correctamente.\nisEmpty() = " + cola.isEmpty(),
                 "Vaciar cola", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnVaciarActionPerformed
 
     private void btnEstaVaciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstaVaciaActionPerformed
         boolean vacia = cola.isEmpty();
-        txtResultado.setText("isEmpty() = " + vacia + "\n"
+        mostrarResultado("isEmpty() = " + vacia + "\n"
                 + (vacia ? "La cola no contiene trabajos." : "La cola contiene " + cola.size() + " trabajo(s)."));
     }//GEN-LAST:event_btnEstaVaciaActionPerformed
 
@@ -461,8 +461,14 @@ public class TestColaTrabajos extends javax.swing.JFrame {
         txtTitulo.requestFocus();
     }
 
+    /** Muestra un texto en el área de resultado, desde el inicio. */
+    private void mostrarResultado(String texto) {
+        txtResultado.setText(texto);
+        txtResultado.setCaretPosition(0);
+    }
+
     private void advertencia(String titulo, String mensaje) {
-        txtResultado.setText("ADVERTENCIA: " + mensaje);
+        mostrarResultado("ADVERTENCIA: " + mensaje);
         JOptionPane.showMessageDialog(this, mensaje, titulo, JOptionPane.WARNING_MESSAGE);
     }
 
@@ -489,7 +495,15 @@ public class TestColaTrabajos extends javax.swing.JFrame {
                 } else {
                     marca = "";
                 }
-                sb.append(String.format(" %-13s %2d. %s%n", marca, i + 1, elementos.get(i)));
+                // toString() polimórfico, partido en dos renglones para que quepa en pantalla
+                String texto = elementos.get(i).toString();
+                int corte = texto.indexOf(" | ");
+                String linea1 = corte > 0 ? texto.substring(0, corte) : texto;
+                String linea2 = corte > 0 ? texto.substring(corte + 3) : "";
+                sb.append(String.format(" %-13s %2d. %s%n", marca, i + 1, linea1));
+                if (!linea2.isEmpty()) {
+                    sb.append(String.format(" %-13s     %s%n", "", linea2));
+                }
             }
             sb.append("                ▲\n");
             sb.append("               Entra por aquí (offer)\n");

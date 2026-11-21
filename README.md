@@ -1,8 +1,8 @@
 # Actividad 4.2 — Cola de Trabajos de Biblioteca (FIFO)
 
 **Integrantes:**
-- Barrutiea Nulutagua Juan Alexander
 - Alcala Bejarano Jennifer Paola
+- Barrutieta Nulutagua Juan Alexander
 
 Sistema en Java Swing (NetBeans GUI Builder) para gestionar documentos de una biblioteca con una
 **cola dinámica (FIFO)** implementada con nodos enlazados. Se reutiliza la jerarquía de herencia

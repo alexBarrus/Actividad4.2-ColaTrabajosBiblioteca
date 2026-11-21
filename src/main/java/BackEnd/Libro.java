@@ -1,4 +1,4 @@
-/*Barrutiea Nulutagua Juan Alexander
+/*Barrutieta Nulutagua Juan Alexander
 Alcala Bejarano Jennifer Paola
 */
 
